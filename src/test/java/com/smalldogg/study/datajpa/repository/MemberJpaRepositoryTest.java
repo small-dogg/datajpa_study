@@ -1,6 +1,7 @@
 package com.smalldogg.study.datajpa.repository;
 
 import com.smalldogg.study.datajpa.entity.Member;
+import com.smalldogg.study.datajpa.entity.Team;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,5 +86,40 @@ class MemberJpaRepositoryTest {
 
         List<Member> result = memberJpaRepository.findByUsername("AAA");
         assertThat(result.get(0)).isEqualTo(member1);
+    }
+
+    @Test
+    public void paging() {
+        memberJpaRepository.save(new Member("member1",10));
+        memberJpaRepository.save(new Member("member2",10));
+        memberJpaRepository.save(new Member("member3",10));
+        memberJpaRepository.save(new Member("member4",10));
+        memberJpaRepository.save(new Member("member5",10));
+
+        int age = 10;
+        int offset = 0;
+        int limit = 3;
+
+        List<Member> members = memberJpaRepository.findByPage(age, offset, limit);
+        long totalCount = memberJpaRepository.totalCount(10);
+
+        assertThat(members.size()).isEqualTo(3);
+        assertThat(totalCount).isEqualTo(5);
+    }
+
+    @Test
+    public void bulkUpdate() {
+
+        memberJpaRepository.save(new Member("member1",10));
+        memberJpaRepository.save(new Member("member2",19));
+        memberJpaRepository.save(new Member("member3",20));
+        memberJpaRepository.save(new Member("member4",21));
+        memberJpaRepository.save(new Member("member5",40));
+
+        int resultCount = memberJpaRepository.bulkAgePlus(20);
+
+        System.out.println("resultCount = " + resultCount);
+
+        assertThat(resultCount).isEqualTo(3);
     }
 }
