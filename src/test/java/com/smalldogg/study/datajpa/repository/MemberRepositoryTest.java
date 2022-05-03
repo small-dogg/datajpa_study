@@ -294,4 +294,9 @@ class MemberRepositoryTest {
         // 변경감지(dirty checking) 발생.
         em.flush();
     }
+
+    @Test
+    public void callCustom() {
+        List<Member> memberCustom = memberRepository.findMemberCustom();
+    }
 }

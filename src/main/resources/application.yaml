@@ -13,6 +13,13 @@ spring:
           #show_sql: true
           format_sql: true
 
+  data:
+    web:
+      pageable:
+        default-page-size: 10
+        max-page-size: 2000
+        #one-indexed-parameters: true #1부터 page를 시작함. 그냥 -1할뿐...
+
 logging.level:
     org.hibernate.sql: debug
     #org.hibernate.type: trace
