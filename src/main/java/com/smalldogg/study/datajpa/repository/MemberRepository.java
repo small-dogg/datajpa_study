@@ -91,4 +91,22 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     //select for update(isolation, propagation 관련)
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     List<Member> findLockByUsername(String username);
+
+    //Interface 기반의 Open 또는 Close 프로젝션
+//    List<UsernameOnly> findProjectionsByUsername(@Param("username") String username);
+
+    //Class Projection
+    List<UsernameOnlyDto> findProjectionsByUsername(@Param("username") String username);
+
+    //Class Projection with Generic
+    <T> List<T> findProjectionsByUsername(@Param("username") String username, Class<T> type);
+
+    //Native Query
+    @Query(value = "select * from member where username = ?", nativeQuery = true)
+    Member findByNavtiveQuery(String username);
+
+    @Query(value = "select m.member_id as id, m.username, t.name as teamName " +
+            "from member m left join team t",
+            countQuery = "select count(*) from member",nativeQuery = true)
+    Page<MemberProjection> findByNativeProjection(Pageable pageable);
 }
